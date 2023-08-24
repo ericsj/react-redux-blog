@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialStare = [
+const initialState = [
   {
     id: "1",
     title: "Learning Redux",
@@ -18,10 +18,11 @@ const postsSlice = createSlice({
   name: "posts",
   reducers: {
     addPost: (state, action) => {
-      state = [...state, action.payload];
+      state.push(action.payload);
     },
   },
 });
 
-export {addPost} from postsSlice.actions
-export default postsSlice.reducer
+export const selectAllPosts = (state) => state.posts;
+export const { addPost } = postsSlice.actions;
+export default postsSlice.reducer;

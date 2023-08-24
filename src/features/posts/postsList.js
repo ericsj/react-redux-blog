@@ -1,9 +1,9 @@
 import { UseSelector, useSelector } from "react-redux/es/hooks/useSelector";
-
+import { selectAllPosts } from "./postsSlice";
 import React from "react";
 
-function postsList() {
-  const posts = useSelector((state) => state.posts);
+function PostsList() {
+  const posts = useSelector(selectAllPosts);
 
   const renderedPosts = posts.map((post) => (
     <article key={post.id}>
@@ -19,4 +19,4 @@ function postsList() {
   );
 }
 
-export default postsList;
+export default PostsList;
