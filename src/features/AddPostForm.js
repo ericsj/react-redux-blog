@@ -13,13 +13,8 @@ function AddPostForm() {
   const dispatch = useDispatch();
   const onSavePostClicked = () => {
     if (title && content) {
-      dispatch(
-        addPost({
-          id: nanoid(),
-          title,
-          content,
-        })
-      );
+      console.log(1919);
+      dispatch(addPost(title, content));
       setTitle("");
       setContent("");
     }
@@ -27,7 +22,7 @@ function AddPostForm() {
   return (
     <section>
       <h2>Add a new post</h2>
-      <form onSubmit={onSavePostClicked}>
+      <form>
         <label htmlFor="postTitle">Post Title:</label>
         <input
           type="text"
@@ -44,7 +39,9 @@ function AddPostForm() {
           value={content}
           onChange={onContentChanged}
         ></input>
-        <button>Save Post</button>
+        <button type="button" onClick={onSavePostClicked}>
+          Save Post
+        </button>
       </form>
     </section>
   );
