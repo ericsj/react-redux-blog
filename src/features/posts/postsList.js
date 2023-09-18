@@ -4,6 +4,7 @@ import { selectAllPosts } from "./postsSlice";
 import PostAuthor from '../posts/PostAuthor'
 import { sub } from 'date-fns'
 import TimeAgo from './TimeAgo'
+import ReactionButtons from './ReactionButtons'
 
 function PostsList() {
   const posts = useSelector(selectAllPosts);
@@ -15,6 +16,7 @@ function PostsList() {
       <p className="postCredit">
         <PostAuthor userId={post.userId} />
         <TimeAgo timestamp={post.date} />
+        <ReactionButtons post={post} />
       </p>
     </article>
   ));
