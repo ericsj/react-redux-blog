@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
@@ -9,8 +9,8 @@ import { selectAllUsers } from "./users/usersSlice";
 function AddPostForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [userId, setUserId] = useState("");
   const users = useSelector(selectAllUsers);
+  const [userId, setUserId] = useState(users[0].id);
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
   const onUserChanged = (e) => setUserId(e.target.value);
@@ -22,7 +22,7 @@ function AddPostForm() {
       setContent("");
     }
   };
-  const canSave = Boolean(title) && Boolean(content) && Boolean(userId);
+  const canSave = Boolean(title) && Boolean(content);
   const userOptions = users.map((user) => (
     <option key={user.id} value={user.id}>
       {user.name}
