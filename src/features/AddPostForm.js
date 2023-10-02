@@ -10,7 +10,7 @@ function AddPostForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const users = useSelector(selectAllUsers);
-  const [userId, setUserId] = useState(users[0].id);
+  const [userId, setUserId] = useState();
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
   const onUserChanged = (e) => setUserId(e.target.value);
