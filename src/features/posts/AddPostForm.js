@@ -3,8 +3,8 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 
-import { addPost } from "./posts/postsSlice";
-import { selectAllUsers } from "./users/usersSlice";
+import { addPost, createPost } from "./postsSlice";
+import { selectAllUsers } from "../users/usersSlice";
 
 function AddPostForm() {
   const [title, setTitle] = useState("");
@@ -17,7 +17,7 @@ function AddPostForm() {
   const dispatch = useDispatch();
   const onSavePostClicked = () => {
     if (canSave) {
-      dispatch(addPost(title, content, userId));
+      dispatch(createPost({ title, content, userId }));
       setTitle("");
       setContent("");
     }

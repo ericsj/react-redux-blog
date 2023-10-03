@@ -11,8 +11,22 @@ const initialState = {
 }
 
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
-  const response = await axios.get(POSTS_URL)
-  return [...response.data]
+  try {
+    const response = await axios.get(POSTS_URL)
+    return response.data
+  } catch (err) {
+    return err.message
+  }
+})
+
+export const createPost = createAsyncThunk('posts/createPost', async (data) => {
+  try {
+    const response = await axios.post(POSTS_URL, data)
+    return response.data
+  } catch (err) {
+    return err
+  }
+
 })
 
 const postsSlice = createSlice({
@@ -75,11 +89,37 @@ const postsSlice = createSlice({
         state.status = 'failed'
         state.error = action.error.message
       })
+      .addCase(createPost.pending, (state, action) => {
+        state.status = 'loading'
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        const { userId, title, content } = action
+        let min = 1
+        let post = {
+          title,
+          content,
+          userId,
+          date: sub(new Date(), { minutes: min++ }).toISOString(),
+          reactions: {
+            thumbsUp: 0,
+            hooray: 0,
+            heart: 0,
+            rocket: 0,
+            eyes: 0
+          }
+        }
+        state.posts.push(post)
+      })
+      .addCase(createPost.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error.message
+      })
   }
 });
 
 export const selectAllPosts = (state) => state.posts.posts;
 export const getPostsStatus = (state) => state.posts.status;
 export const getPostsError = (state) => state.posts.error;
-export const { addPost, reactionAdded } = postsSlice.actions;
+export const { reactionAdded } = postsSlice.actions;
 export default postsSlice.reducer;
