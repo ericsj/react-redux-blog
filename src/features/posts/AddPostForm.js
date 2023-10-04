@@ -3,26 +3,35 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 
-import { addPost, createPost } from "./postsSlice";
+import { addPost, createPost, getPostsStatus, setPostStatus } from "./postsSlice";
 import { selectAllUsers } from "../users/usersSlice";
 
 function AddPostForm() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const users = useSelector(selectAllUsers);
+  const [addRequestStatus, setAddRequestStatus] = useState('idle');
   const [userId, setUserId] = useState();
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
   const onUserChanged = (e) => setUserId(e.target.value);
   const dispatch = useDispatch();
+  const canSave = [title, content, userId].every(v => v !== undefined) && addRequestStatus === 'idle';
   const onSavePostClicked = () => {
     if (canSave) {
-      dispatch(createPost({ title, content, userId }));
-      setTitle("");
-      setContent("");
+      try {
+        setAddRequestStatus('pending')
+        dispatch(createPost({ title, content, userId }));
+        setTitle("");
+        setContent("");
+        setUserId("");
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setAddRequestStatus('idle');
+      }
     }
   };
-  const canSave = Boolean(title) && Boolean(content);
   const userOptions = users.map((user) => (
     <option key={user.id} value={user.id}>
       {user.name}

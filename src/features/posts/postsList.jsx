@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
-import { selectAllPosts, getPostsStatus, getPostsError, fetchPosts } from "./postsSlice";
+import { selectAllPosts, getPostsStatus, getPostsError, fetchPosts, setPostStatus } from "./postsSlice";
 import PostAuthor from '../posts/PostAuthor'
 import { sub } from 'date-fns'
 import TimeAgo from './TimeAgo'
@@ -18,6 +18,7 @@ function PostsList() {
   useEffect(() => {
     if (postsStatus === 'idle') {
       dispatch(fetchPosts())
+      dispatch(setPostStatus('idle'))
     }
   }, [postsStatus, dispatch])
 
