@@ -35,12 +35,12 @@ const postsSlice = createSlice({
       reducer: (state, action) => {
         state.posts.push(action.payload);
       },
-      prepare: (title, content, userId) => {
+      prepare: (title, body, userId) => {
         return {
           payload: {
             id: nanoid(),
             title,
-            content,
+            body,
             reactions: {
               thumbsUp: 0,
               hooray: 0,
@@ -95,11 +95,11 @@ const postsSlice = createSlice({
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        const { userId, title, content } = action
+        const { userId, title, body } = action.payload
         let min = 1
         let post = {
           title,
-          content,
+          body,
           userId,
           date: sub(new Date(), { minutes: min++ }).toISOString(),
           reactions: {

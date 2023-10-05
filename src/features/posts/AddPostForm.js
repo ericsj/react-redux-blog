@@ -8,22 +8,22 @@ import { selectAllUsers } from "../users/usersSlice";
 
 function AddPostForm() {
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [body, setBody] = useState("");
   const users = useSelector(selectAllUsers);
   const [addRequestStatus, setAddRequestStatus] = useState('idle');
   const [userId, setUserId] = useState();
   const onTitleChanged = (e) => setTitle(e.target.value);
-  const onContentChanged = (e) => setContent(e.target.value);
+  const onContentChanged = (e) => setBody(e.target.value);
   const onUserChanged = (e) => setUserId(e.target.value);
   const dispatch = useDispatch();
-  const canSave = [title, content, userId].every(v => v !== undefined) && addRequestStatus === 'idle';
+  const canSave = [title, body, userId].every(v => v !== undefined) && addRequestStatus === 'idle';
   const onSavePostClicked = () => {
     if (canSave) {
       try {
         setAddRequestStatus('pending')
-        dispatch(createPost({ title, content, userId }));
+        dispatch(createPost({ title, body, userId }));
         setTitle("");
-        setContent("");
+        setBody("");
         setUserId("");
       } catch (err) {
         console.error(err)
@@ -65,7 +65,7 @@ function AddPostForm() {
           type="text"
           id="postContent"
           name="postContent"
-          value={content}
+          value={body}
           onChange={onContentChanged}
         ></input>
         <button disabled={!canSave} type="button" onClick={onSavePostClicked}>
