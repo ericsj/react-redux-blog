@@ -3,13 +3,14 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 
-import { addPost, createPost, getPostsStatus, setPostStatus } from "./postsSlice";
-import { selectAllUsers } from "../users/usersSlice";
+import { addPost, createPost, fetchPosts, getPostsStatus, setPostStatus } from "./postsSlice";
+import { selectAllUsers, selectUsersStatus } from "../users/usersSlice";
 
 function AddPostForm() {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [title, setTitle] = useState();
+  const [body, setBody] = useState();
   const users = useSelector(selectAllUsers);
+  const usersStatus = useSelector(selectUsersStatus);
   const [addRequestStatus, setAddRequestStatus] = useState('idle');
   const [userId, setUserId] = useState();
   const onTitleChanged = (e) => setTitle(e.target.value);
@@ -32,13 +33,23 @@ function AddPostForm() {
       }
     }
   };
-  const userOptions = users.map((user) => (
-    <option key={user.id} value={user.id}>
-      {user.name}
-    </option>
-  ));
+  if (usersStatus === 'idle') {
+    dispatch(fetchPosts())
+    dispatch(setPostStatus('idle'))
+  }
+  let userOptions = []
+  useEffect(() => {
+    setUserId(users[0].id)
+  }, [users])
+  if (usersStatus === 'completed') {
+    userOptions = users.map((user) => (
+      <option key={user.id} value={user.id}>
+        {user.name}
+      </option>
+    ));
+  }
 
-  return (
+  return usersStatus === 'completed' ? (
     <section>
       <h2>Add a new post</h2>
       <form>
@@ -55,7 +66,7 @@ function AddPostForm() {
           type="text"
           id="postAuthor"
           name="postAuthor"
-          value={userId}
+          value={userOptions[0].id}
           onChange={onUserChanged}
         >
           {userOptions}
@@ -73,7 +84,7 @@ function AddPostForm() {
         </button>
       </form>
     </section>
-  );
+  ) : <p>Loading...</p>;
 }
 
 export default AddPostForm;

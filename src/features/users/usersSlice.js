@@ -3,7 +3,11 @@ import axios from "axios";
 
 const USERS_URL = 'https://jsonplaceholder.typicode.com/users'
 
-const initialState = []
+const initialState = {
+  users: [],
+  status: 'idle',
+}
+
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
   try {
@@ -20,10 +24,12 @@ const usersSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
-      return action.payload
+      state.status = 'completed'
+      state.users = action.payload
     })
   }
 })
 
-export const selectAllUsers = (state) => state.users
+export const selectAllUsers = (state) => state.users.users
+export const selectUsersStatus = (state) => state.users.status
 export default usersSlice.reducer
