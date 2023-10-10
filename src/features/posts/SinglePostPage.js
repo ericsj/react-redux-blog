@@ -1,10 +1,15 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import PostAuthor from './PostAuthor'
 import TimeAgo from './TimeAgo'
 import ReactionButtons from './ReactionButtons'
+import { selectPostById } from './postsSlice'
+import { useParams } from 'react-router-dom'
 
-function PostsExcerpt({ post }) {
+function SinglePostPage() {
 
+    const { postId } = useParams()
+    const post = useSelector(state => selectPostById(state, postId))
     return (
         <article >
             <h3>{post.title}</h3>
@@ -17,4 +22,4 @@ function PostsExcerpt({ post }) {
         </article>)
 }
 
-export default PostsExcerpt
+export default SinglePostPage
