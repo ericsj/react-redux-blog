@@ -10,7 +10,7 @@ function SinglePostPage() {
 
     const { postId } = useParams()
     const post = useSelector(state => selectPostById(state, postId))
-    return (
+    return post ? (
         <article >
             <h3>{post.title}</h3>
             <p>{post.body.substring(0, 100)}</p>
@@ -20,6 +20,7 @@ function SinglePostPage() {
                 <ReactionButtons post={post} />
             </p>
         </article>)
+        : (<h3>Post not found!</h3>)
 }
 
 export default SinglePostPage
