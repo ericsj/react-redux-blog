@@ -25,7 +25,14 @@ export const createPost = createAsyncThunk('posts/createPost', async (data) => {
   } catch (err) {
     return err
   }
-
+})
+export const updatePost = createAsyncThunk('posts/updatePost', async (data) => {
+  try {
+    const response = await axios.put(POSTS_URL, data)
+    return response.data
+  } catch (err) {
+    return err
+  }
 })
 const postsSlice = createSlice({
   initialState,
@@ -113,6 +120,18 @@ const postsSlice = createSlice({
         state.posts.push(post)
       })
       .addCase(createPost.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error.message
+      })
+      .addCase(updatePost.pending, (state, action) => {
+        state.status = 'loading'
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.posts.filter(post => post.id !== action.payload.id)
+        state.posts.push(action.payload)
+      })
+      .addCase(updatePost.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
       })
